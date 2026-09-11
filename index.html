@@ -52,9 +52,15 @@
         .dashboard-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 1px solid #1e3a8a; padding-bottom: 15px; }
         .user-info { font-size: 0.9rem; color: var(--text-muted); }
         
-        .human-container { position: relative; width: 100%; max-width: 500px; height: 420px; margin: 30px auto; display: flex; justify-content: center; align-items: center; background: radial-gradient(circle, #111827 0%, #050508 80%); border-radius: 12px; border: 1px dashed #334155; }
+        .human-container { position: relative; width: 100%; max-width: 500px; height: 420px; margin: 30px auto 15px auto; display: flex; justify-content: center; align-items: center; background: radial-gradient(circle, #111827 0%, #050508 80%); border-radius: 12px; border: 1px dashed #334155; }
         .human-figure { width: 140px; height: 320px; background: url('human.png') no-repeat center center; background-size: contain; opacity: 0.85; filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.3)); }
         
+        /* Barra de Progreso Global bajo la figura */
+        .progress-wrapper { width: 100%; max-width: 500px; margin: 0 auto 30px auto; background: #111827; padding: 12px 15px; border-radius: 8px; border: 1px solid #334155; }
+        .progress-info { display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px; }
+        .progress-bar-container { width: 100%; height: 10px; background: #000; border-radius: 5px; overflow: hidden; border: 1px solid #334155; }
+        .progress-bar-fill { width: 0%; height: 100%; background: linear-gradient(90deg, #10b981, #3b82f6); transition: width 0.3s ease; }
+
         /* Indicator nodes around the body */
         .indicator-node { position: absolute; width: 45%; background: rgba(11, 15, 25, 0.9); border: 1px solid #334155; padding: 10px; border-radius: 8px; font-size: 0.8rem; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
         .node-sueño { top: 15px; left: 10px; border-left: 4px solid var(--accent-color); }
@@ -116,7 +122,7 @@
             <div class="dashboard-header">
                 <div>
                     <h2><i class="fa-solid fa-brain"></i> Seguimiento Plan de Entrenamiento Neurocognitivo</h2>
-                    <p class="subtitle" style="text-align: left; margin: 0;">Protocolo de optimización avanzada (15 días / 5 Fases)</p>
+                    <p class="subtitle" style="text-align: left; margin: 0;">Protocolo de optimización avanzada (15 días / 5 Fases)[cite: 4]</p>
                 </div>
                 <div class="user-info">
                     <i class="fa-solid fa-circle-user text-accent"></i> <span id="lbl-usuario">Paciente</span> | <a href="#" onclick="cerrarSesion()" style="color: var(--accent-color); text-decoration: none; margin-left: 10px;">Salir</a>
@@ -187,19 +193,30 @@
 
                 </div>
 
+                <!-- BARRA DE PROGRESO DE ACTIVIDADES DEBAJO DE LA FIGURA -->
+                <div class="progress-wrapper">
+                    <div class="progress-info">
+                        <span>Progreso General de Actividades del Plan</span>
+                        <span id="progress-text">0% (0 / 10 completadas)</span>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar-fill" id="progress-bar"></div>
+                    </div>
+                </div>
+
                 <!-- CHECKLIST DE ACTIVIDADES DEL PLAN (AGRUPADAS POR FASES / CATEGORÍAS DEL DOCUMENTO) -->
                 <h2><i class="fa-solid fa-list-check"></i> Checklist de Actividades del Plan por Fases</h2>
-                <p class="subtitle" style="text-align: left; margin-bottom: 15px;">Marque las actividades y ejercicios completados en su sesión diaria según el documento:</p>
+                <p class="subtitle" style="text-align: left; margin-bottom: 15px;">Marque las actividades y ejercicios completados en su sesión diaria según el documento[cite: 4]:</p>
 
                 <!-- FASE 1 -->
                 <div class="activity-section">
                     <h3>Fase 1 (Días 1-3): Activación y Velocidad de Procesamiento[cite: 4]</h3>
                     <div class="activity-item">
-                        <input type="checkbox" id="act_1a" value="Cancelación Cruzada de Alta Densidad">
+                        <input type="checkbox" id="act_1a" value="Cancelación Cruzada de Alta Densidad" onchange="actualizarProgreso()">
                         <label for="act_1a"><strong>Ejercicio 1A: Cancelación Cruzada de Alta Densidad</strong> - Escaneo matricial de 3 minutos con reglas duales (tachado diagonal de 7 precedido por 4, y círculo de 3 precedido por 8)[cite: 4].</label>
                     </div>
                     <div class="activity-item">
-                        <input type="checkbox" id="act_1b" value="Fluidez Verbal Fonológica y Semántica Cruzada">
+                        <input type="checkbox" id="act_1b" value="Fluidez Verbal Fonológica y Semántica Cruzada" onchange="actualizarProgreso()">
                         <label for="act_1b"><strong>Ejercicio 1B: Fluidez Verbal Fonológica y Semántica Cruzada</strong> - Switching de regla cada 30 segundos (Fonológica P -> Semántica Animales -> Fonológica -> Semántica)[cite: 4].</label>
                     </div>
                 </div>
@@ -208,11 +225,11 @@
                 <div class="activity-section">
                     <h3>Fase 2 (Días 4-6): Memoria de Trabajo y Manipulación Activa[cite: 4]</h3>
                     <div class="activity-item">
-                        <input type="checkbox" id="act_2a" value="Span de Dígitos Inverso con Interferencia">
+                        <input type="checkbox" id="act_2a" value="Span de Dígitos Inverso con Interferencia" onchange="actualizarProgreso()">
                         <label for="act_2a"><strong>Ejercicio 2A: Span de Dígitos Inverso con Interferencia</strong> - Transformación aritmética (restar 1 o sumar 2) simultánea a la inversión de orden de series numéricas[cite: 4].</label>
                     </div>
                     <div class="activity-item">
-                        <input type="checkbox" id="act_2b" value="Codificación Visoespacial Compleja">
+                        <input type="checkbox" id="act_2b" value="Codificación Visoespacial Compleja" onchange="actualizarProgreso()">
                         <label for="act_2b"><strong>Ejercicio 2B: Codificación Visoespacial Compleja</strong> - Navegación mental en cuadrícula de 5x5 siguiendo instrucciones direccionales sin soporte externo[cite: 4].</label>
                     </div>
                 </div>
@@ -221,11 +238,11 @@
                 <div class="activity-section">
                     <h3>Fase 3 (Días 7-9): Flexibilidad Cognitiva y Cambio de Set[cite: 4]</h3>
                     <div class="activity-item">
-                        <input type="checkbox" id="act_3a" value="Stroop Modificado con Cambio de Regla">
+                        <input type="checkbox" id="act_3a" value="Stroop Modificado con Cambio de Regla" onchange="actualizarProgreso()">
                         <label for="act_3a"><strong>Ejercicio 3A: Stroop Modificado con Cambio de Regla</strong> - Alternancia por formato tipográfico (minúsculas: nombrar color de tinta; mayúsculas: nombrar palabra ignorando color)[cite: 4].</label>
                     </div>
                     <div class="activity-item">
-                        <input type="checkbox" id="act_3b" value="Categorización Fluida de Conceptos Abstractos">
+                        <input type="checkbox" id="act_3b" value="Categorización Fluida de Conceptos Abstractos" onchange="actualizarProgreso()">
                         <label for="act_3b"><strong>Ejercicio 3B: Categorización Fluida de Conceptos Abstractos</strong> - Reclasificación sucesiva de 15 conceptos bajo 3 criterios (utilidad práctica, origen conceptual y extensión léxica)[cite: 4].</label>
                     </div>
                 </div>
@@ -234,11 +251,11 @@
                 <div class="activity-section">
                     <h3>Fase 4 (Días 10-12): Orientación Espacial Avanzada y Gnosias[cite: 4]</h3>
                     <div class="activity-item">
-                        <input type="checkbox" id="act_4a" value="Navegación Topográfica Invertida">
+                        <input type="checkbox" id="act_4a" value="Navegación Topográfica Invertida" onchange="actualizarProgreso()">
                         <label for="act_4a"><strong>Ejercicio 4A: Navegación Topográfica Invertida</strong> - Reconstrucción de memoria de un plano de trayecto desde el destino al origen con puntos de referencia cada ~100 metros[cite: 4].</label>
                     </div>
                     <div class="activity-item">
-                        <input type="checkbox" id="act_4b" value="Integración Gnosio-Práxica Compleja">
+                        <input type="checkbox" id="act_4b" value="Integración Gnosio-Práxica Compleja" onchange="actualizarProgreso()">
                         <label for="act_4b"><strong>Ejercicio 4B: Integración Gnosio-Práxica Compleja</strong> - Figuras de cuerda (cat's cradle) sin visión directa y rotación mental de reloj (ej. 135° antihorario)[cite: 4].</label>
                     </div>
                 </div>
@@ -247,11 +264,11 @@
                 <div class="activity-section">
                     <h3>Fase 5 (Días 13-15): Funciones Ejecutivas Superiores y Planificación[cite: 4]</h3>
                     <div class="activity-item">
-                        <input type="checkbox" id="act_5a" value="Matriz de Planificación con Restricciones Múltiples">
+                        <input type="checkbox" id="act_5a" value="Matriz de Planificación con Restricciones Múltiples" onchange="actualizarProgreso()">
                         <label for="act_5a"><strong>Ejercicio 5A: Matriz de Planificación con Restricciones Múltiples</strong> - Organización óptima de 4 tareas en ventana de 2 horas bajo reglas lógicas y receso obligatorio[cite: 4].</label>
                     </div>
                     <div class="activity-item">
-                        <input type="checkbox" id="act_5b" value="Inhibición de Respuestas Automatizadas">
+                        <input type="checkbox" id="act_5b" value="Inhibición de Respuestas Automatizadas" onchange="actualizarProgreso()">
                         <label for="act_5b"><strong>Ejercicio 5B: Inhibición de Respuestas Automatizadas</strong> - Supresión voluntaria del parpadeo durante 90 segundos de lectura en voz alta con control prosódico[cite: 4].</label>
                     </div>
                 </div>
@@ -285,6 +302,7 @@
         const db = firebase.firestore();
 
         document.getElementById('fecha_registro').valueAsDate = new Date();
+        let pacienteActualDocId = null;
 
         async function ejecutarLogin(e) {
             e.preventDefault();
@@ -305,12 +323,18 @@
 
                     if (credsEnAdmision || credsDirectas) {
                         pacienteEncontrado = data;
+                        pacienteActualDocId = docSnap.id;
                     }
                 });
 
                 if (pacienteEncontrado) {
                     const nombrePaciente = pacienteEncontrado.name || pacienteEncontrado.nombre || usuarioInput;
                     document.getElementById('lbl-usuario').textContent = nombrePaciente;
+                    
+                    // Cargar último progreso guardado en el documento del paciente en Firestore (si existe)
+                    const ultimoProgreso = pacienteEncontrado.ultimo_progreso_checklist || [];
+                    marcarActividadesChecklist(ultimoProgreso);
+
                     document.getElementById('login-screen').style.display = 'none';
                     document.getElementById('dashboard-screen').style.display = 'block';
                 } else {
@@ -322,7 +346,44 @@
             }
         }
 
+        function marcarActividadesChecklist(listaActividades) {
+            // Limpiar primero
+            for (let i = 1; i <= 5; i++) {
+                ['a', 'b'].forEach(letra => {
+                    const cb = document.getElementById(`act_${i}${letra}`);
+                    if (cb) cb.checked = false;
+                });
+            }
+            // Marcar las que correspondan al progreso guardado
+            listaActividades.forEach(nombreAct => {
+                for (let i = 1; i <= 5; i++) {
+                    ['a', 'b'].forEach(letra => {
+                        const cb = document.getElementById(`act_${i}${letra}`);
+                        if (cb && cb.value === nombreAct) {
+                            cb.checked = true;
+                        }
+                    });
+                }
+            });
+            actualizarProgreso();
+        }
+
+        function actualizarProgreso() {
+            let total = 10;
+            let completadas = 0;
+            for (let i = 1; i <= 5; i++) {
+                ['a', 'b'].forEach(letra => {
+                    const cb = document.getElementById(`act_${i}${letra}`);
+                    if (cb && cb.checked) completadas++;
+                });
+            }
+            const porcentaje = Math.round((completadas / total) * 100);
+            document.getElementById('progress-bar').style.width = porcentaje + '%';
+            document.getElementById('progress-text').textContent = `${porcentaje}% (${completadas} / ${total} completadas)`;
+        }
+
         function cerrarSesion() {
+            pacienteActualDocId = null;
             document.getElementById('dashboard-screen').style.display = 'none';
             document.getElementById('login-screen').style.display = 'flex';
             document.getElementById('form-login').reset();
@@ -363,7 +424,6 @@
         async function enviarSeguimiento(e) {
             e.preventDefault();
 
-            // Recolectar actividades marcadas del checklist por fases
             const actividadesRealizadas = [];
             for (let i = 1; i <= 5; i++) {
                 ['a', 'b'].forEach(letra => {
@@ -388,8 +448,16 @@
             };
 
             try {
+                // 1. Guardar el registro de seguimiento diario en la colección de métricas
                 await db.collection("elite_seguimiento_neurocognitivo").add(payload);
                 
+                // 2. Actualizar el último progreso en el documento del paciente para que aparezca de entrada la próxima vez
+                if (pacienteActualDocId) {
+                    await db.collection("patients").doc(pacienteActualDocId).update({
+                        ultimo_progreso_checklist: actividadesRealizadas
+                    });
+                }
+
                 alert("Su formulario ha sido enviado con éxito.");
                 const toast = document.getElementById('toast');
                 toast.style.display = 'block';
@@ -398,6 +466,7 @@
                 document.getElementById('form-seguimiento').reset();
                 document.getElementById('fecha_registro').valueAsDate = new Date();
                 actualizarColoresEstado();
+                actualizarProgreso();
             } catch (error) {
                 console.error("Error al guardar en base de datos Elite 2.0:", error);
                 alert("Su formulario ha sido enviado con éxito.");
