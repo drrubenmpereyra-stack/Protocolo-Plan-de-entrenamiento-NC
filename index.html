@@ -22,7 +22,7 @@
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
         body { background-color: var(--bg-color); color: var(--text-main); line-height: 1.5; padding: 20px; display: flex; justify-content: center; min-height: 100vh; }
-        .container { width: 100%; max-width: 900px; }
+        .container { width: 100%; max-width: 950px; }
         .card { background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 30px; box-shadow: 0 10px 30px rgba(30, 58, 138, 0.2); margin-bottom: 20px; }
         
         /* Login Screen */
@@ -30,9 +30,10 @@
         .logo-container { text-align: center; margin-bottom: 20px; }
         .logo-container img { width: 90px; height: 90px; border-radius: 50%; border: 2px solid var(--accent-color); object-fit: cover; }
         
-        h1, h2 { color: var(--accent-color); text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 10px; }
+        h1, h2, h3 { color: var(--accent-color); text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 10px; }
         h1 { font-size: 1.3rem; text-align: center; margin-bottom: 5px; }
         h2 { font-size: 1.1rem; margin-bottom: 15px; border-bottom: 1px solid #1e3a8a; padding-bottom: 8px; }
+        h3 { font-size: 0.95rem; margin: 20px 0 10px 0; color: #60a5fa; }
         p.subtitle { font-size: 0.85rem; color: var(--text-muted); text-align: center; margin-bottom: 25px; }
 
         .form-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 18px; }
@@ -70,6 +71,11 @@
         .status-regular { border-color: var(--regular) !important; }
         .status-malo { border-color: var(--malo) !important; }
 
+        /* Checklist de Actividades del Plan */
+        .activity-section { background: #0f172a; border: 1px solid #1e293b; border-radius: 8px; padding: 15px; margin-bottom: 15px; }
+        .activity-item { display: flex; align-items: flex-start; gap: 10px; margin-top: 10px; font-size: 0.85rem; color: #cbd5e1; }
+        .activity-item input[type="checkbox"] { margin-top: 3px; accent-color: var(--accent-color); width: 16px; height: 16px; cursor: pointer; }
+
         #toast { position: fixed; top: 20px; right: 20px; background: #050508; border: 1px solid var(--accent-color); color: #fff; padding: 12px 20px; border-radius: 6px; font-size: 0.85rem; display: none; box-shadow: 0 4px 15px rgba(0,0,0,0.8); z-index: 1000; }
         
         @media(max-width: 650px) {
@@ -105,12 +111,12 @@
             </form>
         </div>
 
-        <!-- PANTALLA DE CHECKLIST DE SEGUIMIENTO (DASHBOARD) -->
+        <!-- PANTALLA DE CHECKLIST DE SEGUIMIENTO Y ACTIVIDADES (DASHBOARD) -->
         <div id="dashboard-screen" class="card">
             <div class="dashboard-header">
                 <div>
                     <h2><i class="fa-solid fa-brain"></i> Seguimiento Plan de Entrenamiento Neurocognitivo</h2>
-                    <p class="subtitle" style="text-align: left; margin: 0;">Protocolo de optimización avanzada - Registro diario</p>
+                    <p class="subtitle" style="text-align: left; margin: 0;">Protocolo de optimización avanzada (15 días / 5 Fases)</p>
                 </div>
                 <div class="user-info">
                     <i class="fa-solid fa-circle-user text-accent"></i> <span id="lbl-usuario">Paciente</span> | <a href="#" onclick="cerrarSesion()" style="color: var(--accent-color); text-decoration: none; margin-left: 10px;">Salir</a>
@@ -131,25 +137,25 @@
                     
                     <!-- NODO SUEÑO -->
                     <div class="indicator-node node-sueño" id="box-sueno">
-                        <label for="sueno_horas">Sueño (Horas): <i class="fa-solid fa-moon"></i></label>
+                        <label for="sueno_horas">Sueño (Horas)[cite: 4]: <i class="fa-solid fa-moon"></i></label>
                         <input type="number" id="sueno_horas" min="0" max="24" step="0.5" placeholder="Ej. 7.5" required onchange="actualizarColoresEstado()">
                     </div>
 
                     <!-- NODO ALIMENTACIÓN -->
                     <div class="indicator-node node-alimentacion" id="box-alim">
-                        <label for="alimentacion_calidad">Alimentación: <i class="fa-solid fa-utensils"></i></label>
+                        <label for="alimentacion_calidad">Alimentación[cite: 4]: <i class="fa-solid fa-utensils"></i></label>
                         <select id="alimentacion_calidad" required onchange="actualizarColoresEstado()">
-                            <option value="" disabled selected>Seleccione calidad...</option>
-                            <option value="Hipercalórica">Hipercalórica</option>
-                            <option value="Normocalórica">Normocalórica (Óptima)</option>
-                            <option value="Hipocalórica">Hipocalórica</option>
+                            <option value="" disabled selected>Seleccione calidad[cite: 4]...</option>
+                            <option value="Hipercalórica">Hipercalórica[cite: 4]</option>
+                            <option value="Normocalórica">Normocalórica (Óptima)[cite: 4]</option>
+                            <option value="Hipocalórica">Hipocalórica[cite: 4]</option>
                         </select>
-                        <label for="alimentacion_comidas" style="margin-top: 6px;">Comidas al día (1-4):</label>
+                        <label for="alimentacion_comidas" style="margin-top: 6px;">Comidas al día (1-4)[cite: 4]:</label>
                         <select id="alimentacion_comidas" required>
-                            <option value="1">1 Comida</option>
-                            <option value="2">2 Comidas</option>
-                            <option value="3">3 Comidas</option>
-                            <option value="4" selected>4 Comidas (Óptimo)</option>
+                            <option value="1">1 Comida[cite: 4]</option>
+                            <option value="2">2 Comidas[cite: 4]</option>
+                            <option value="3">3 Comidas[cite: 4]</option>
+                            <option value="4" selected>4 Comidas (Óptimo)[cite: 4]</option>
                         </select>
                     </div>
 
@@ -158,27 +164,96 @@
 
                     <!-- NODO ÁNIMO -->
                     <div class="indicator-node node-animo" id="box-animo">
-                        <label for="estado_animo">Ánimo: <i class="fa-solid fa-face-smile"></i></label>
+                        <label for="estado_animo">Ánimo[cite: 4]: <i class="fa-solid fa-face-smile"></i></label>
                         <select id="estado_animo" required onchange="actualizarColoresEstado()">
-                            <option value="" disabled selected>Seleccione estado...</option>
-                            <option value="Excelente">Excelente</option>
-                            <option value="Regular">Regular</option>
-                            <option value="Malo">Malo</option>
+                            <option value="" disabled selected>Seleccione estado[cite: 4]...</option>
+                            <option value="Excelente">Excelente[cite: 4]</option>
+                            <option value="Regular">Regular[cite: 4]</option>
+                            <option value="Malo">Malo[cite: 4]</option>
                         </select>
                     </div>
 
                     <!-- NODO FATIGA -->
                     <div class="indicator-node node-fatiga" id="box-fatiga">
-                        <label for="nivel_fatiga">Cansancio: <i class="fa-solid fa-battery-half"></i></label>
+                        <label for="nivel_fatiga">Cansancio[cite: 4]: <i class="fa-solid fa-battery-half"></i></label>
                         <select id="nivel_fatiga" required onchange="actualizarColoresEstado()">
-                            <option value="" disabled selected>Seleccione nivel...</option>
-                            <option value="Sin fatiga">Sin fatiga</option>
-                            <option value="Poco fatigado">Poco fatigado</option>
-                            <option value="Fatigado">Fatigado</option>
-                            <option value="Muy fatigado">Muy fatigado</option>
+                            <option value="" disabled selected>Seleccione nivel[cite: 4]...</option>
+                            <option value="Sin fatiga">Sin fatiga[cite: 4]</option>
+                            <option value="Poco fatigado">Poco fatigado[cite: 4]</option>
+                            <option value="Fatigado">Fatigado[cite: 4]</option>
+                            <option value="Muy fatigado">Muy fatigado[cite: 4]</option>
                         </select>
                     </div>
 
+                </div>
+
+                <!-- CHECKLIST DE ACTIVIDADES DEL PLAN (AGRUPADAS POR FASES / CATEGORÍAS DEL DOCUMENTO) -->
+                <h2><i class="fa-solid fa-list-check"></i> Checklist de Actividades del Plan por Fases</h2>
+                <p class="subtitle" style="text-align: left; margin-bottom: 15px;">Marque las actividades y ejercicios completados en su sesión diaria según el documento:</p>
+
+                <!-- FASE 1 -->
+                <div class="activity-section">
+                    <h3>Fase 1 (Días 1-3): Activación y Velocidad de Procesamiento[cite: 4]</h3>
+                    <div class="activity-item">
+                        <input type="checkbox" id="act_1a" value="Cancelación Cruzada de Alta Densidad">
+                        <label for="act_1a"><strong>Ejercicio 1A: Cancelación Cruzada de Alta Densidad</strong> - Escaneo matricial de 3 minutos con reglas duales (tachado diagonal de 7 precedido por 4, y círculo de 3 precedido por 8)[cite: 4].</label>
+                    </div>
+                    <div class="activity-item">
+                        <input type="checkbox" id="act_1b" value="Fluidez Verbal Fonológica y Semántica Cruzada">
+                        <label for="act_1b"><strong>Ejercicio 1B: Fluidez Verbal Fonológica y Semántica Cruzada</strong> - Switching de regla cada 30 segundos (Fonológica P -> Semántica Animales -> Fonológica -> Semántica)[cite: 4].</label>
+                    </div>
+                </div>
+
+                <!-- FASE 2 -->
+                <div class="activity-section">
+                    <h3>Fase 2 (Días 4-6): Memoria de Trabajo y Manipulación Activa[cite: 4]</h3>
+                    <div class="activity-item">
+                        <input type="checkbox" id="act_2a" value="Span de Dígitos Inverso con Interferencia">
+                        <label for="act_2a"><strong>Ejercicio 2A: Span de Dígitos Inverso con Interferencia</strong> - Transformación aritmética (restar 1 o sumar 2) simultánea a la inversión de orden de series numéricas[cite: 4].</label>
+                    </div>
+                    <div class="activity-item">
+                        <input type="checkbox" id="act_2b" value="Codificación Visoespacial Compleja">
+                        <label for="act_2b"><strong>Ejercicio 2B: Codificación Visoespacial Compleja</strong> - Navegación mental en cuadrícula de 5x5 siguiendo instrucciones direccionales sin soporte externo[cite: 4].</label>
+                    </div>
+                </div>
+
+                <!-- FASE 3 -->
+                <div class="activity-section">
+                    <h3>Fase 3 (Días 7-9): Flexibilidad Cognitiva y Cambio de Set[cite: 4]</h3>
+                    <div class="activity-item">
+                        <input type="checkbox" id="act_3a" value="Stroop Modificado con Cambio de Regla">
+                        <label for="act_3a"><strong>Ejercicio 3A: Stroop Modificado con Cambio de Regla</strong> - Alternancia por formato tipográfico (minúsculas: nombrar color de tinta; mayúsculas: nombrar palabra ignorando color)[cite: 4].</label>
+                    </div>
+                    <div class="activity-item">
+                        <input type="checkbox" id="act_3b" value="Categorización Fluida de Conceptos Abstractos">
+                        <label for="act_3b"><strong>Ejercicio 3B: Categorización Fluida de Conceptos Abstractos</strong> - Reclasificación sucesiva de 15 conceptos bajo 3 criterios (utilidad práctica, origen conceptual y extensión léxica)[cite: 4].</label>
+                    </div>
+                </div>
+
+                <!-- FASE 4 -->
+                <div class="activity-section">
+                    <h3>Fase 4 (Días 10-12): Orientación Espacial Avanzada y Gnosias[cite: 4]</h3>
+                    <div class="activity-item">
+                        <input type="checkbox" id="act_4a" value="Navegación Topográfica Invertida">
+                        <label for="act_4a"><strong>Ejercicio 4A: Navegación Topográfica Invertida</strong> - Reconstrucción de memoria de un plano de trayecto desde el destino al origen con puntos de referencia cada ~100 metros[cite: 4].</label>
+                    </div>
+                    <div class="activity-item">
+                        <input type="checkbox" id="act_4b" value="Integración Gnosio-Práxica Compleja">
+                        <label for="act_4b"><strong>Ejercicio 4B: Integración Gnosio-Práxica Compleja</strong> - Figuras de cuerda (cat's cradle) sin visión directa y rotación mental de reloj (ej. 135° antihorario)[cite: 4].</label>
+                    </div>
+                </div>
+
+                <!-- FASE 5 -->
+                <div class="activity-section">
+                    <h3>Fase 5 (Días 13-15): Funciones Ejecutivas Superiores y Planificación[cite: 4]</h3>
+                    <div class="activity-item">
+                        <input type="checkbox" id="act_5a" value="Matriz de Planificación con Restricciones Múltiples">
+                        <label for="act_5a"><strong>Ejercicio 5A: Matriz de Planificación con Restricciones Múltiples</strong> - Organización óptima de 4 tareas en ventana de 2 horas bajo reglas lógicas y receso obligatorio[cite: 4].</label>
+                    </div>
+                    <div class="activity-item">
+                        <input type="checkbox" id="act_5b" value="Inhibición de Respuestas Automatizadas">
+                        <label for="act_5b"><strong>Ejercicio 5B: Inhibición de Respuestas Automatizadas</strong> - Supresión voluntaria del parpadeo durante 90 segundos de lectura en voz alta con control prosódico[cite: 4].</label>
+                    </div>
                 </div>
 
                 <div class="form-group" style="margin-top: 20px;">
@@ -288,6 +363,17 @@
         async function enviarSeguimiento(e) {
             e.preventDefault();
 
+            // Recolectar actividades marcadas del checklist por fases
+            const actividadesRealizadas = [];
+            for (let i = 1; i <= 5; i++) {
+                ['a', 'b'].forEach(letra => {
+                    const checkbox = document.getElementById(`act_${i}${letra}`);
+                    if (checkbox && checkbox.checked) {
+                        actividadesRealizadas.push(checkbox.value);
+                    }
+                });
+            }
+
             const payload = {
                 usuario: document.getElementById('lbl-usuario').textContent,
                 fecha: document.getElementById('fecha_registro').value,
@@ -296,6 +382,7 @@
                 alimentacion_comidas: parseInt(document.getElementById('alimentacion_comidas').value),
                 estado_animo: document.getElementById('estado_animo').value,
                 nivel_fatiga: document.getElementById('nivel_fatiga').value,
+                actividades_checklist: actividadesRealizadas,
                 observaciones: document.getElementById('observaciones').value.trim(),
                 timestamp_envio: new Date().toISOString()
             };
