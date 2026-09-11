@@ -70,14 +70,11 @@
         .status-regular { border-color: var(--regular) !important; }
         .status-malo { border-color: var(--malo) !important; }
 
-        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        
         #toast { position: fixed; top: 20px; right: 20px; background: #050508; border: 1px solid var(--accent-color); color: #fff; padding: 12px 20px; border-radius: 6px; font-size: 0.85rem; display: none; box-shadow: 0 4px 15px rgba(0,0,0,0.8); z-index: 1000; }
         
         @media(max-width: 650px) {
             .human-container { height: auto; flex-direction: column; padding: 20px; }
             .indicator-node { position: static; width: 100%; margin-bottom: 10px; }
-            .form-row { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -212,7 +209,6 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        // Establecer fecha actual por defecto en el selector
         document.getElementById('fecha_registro').valueAsDate = new Date();
 
         async function ejecutarLogin(e) {
@@ -221,29 +217,33 @@
             const passwordInput = document.getElementById('password').value.trim();
 
             try {
-                // Validación contra base de datos asignada para protocolo en Elite 2.0
-                const snapshot = await db.collection("elite_pacientes_credenciales")
-                    .where("usuario", "==", usuarioInput)
-                    .where("password", "==", passwordInput)
-                    .get();
+                const querySnapshot = await db.collection("patients").get();
+                let pacienteEncontrado = null;
 
-                if (!snapshot.empty) {
-                    document.getElementById('lbl-usuario').textContent = usuarioInput;
+                querySnapshot.forEach(docSnap => {
+                    const data = docSnap.data();
+                    const credsEnAdmision = data.admision_protocolo && 
+                                            data.admision_protocolo.usuario === usuarioInput && 
+                                            data.admision_protocolo.password === passwordInput;
+                    
+                    const credsDirectas = data.usuario === usuarioInput && data.password === passwordInput;
+
+                    if (credsEnAdmision || credsDirectas) {
+                        pacienteEncontrado = data;
+                    }
+                });
+
+                if (pacienteEncontrado) {
+                    const nombrePaciente = pacienteEncontrado.name || pacienteEncontrado.nombre || usuarioInput;
+                    document.getElementById('lbl-usuario').textContent = nombrePaciente;
                     document.getElementById('login-screen').style.display = 'none';
                     document.getElementById('dashboard-screen').style.display = 'block';
                 } else {
                     alert("Credenciales incorrectas o usuario no autorizado para este protocolo en Elite 2.0.");
                 }
             } catch (error) {
-                console.error("Error en autenticación:", error);
-                // Modo fallback si no hay conexión estricta de credenciales previas creadas
-                if(usuarioInput.length > 2) {
-                    document.getElementById('lbl-usuario').textContent = usuarioInput;
-                    document.getElementById('login-screen').style.display = 'none';
-                    document.getElementById('dashboard-screen').style.display = 'block';
-                } else {
-                    alert("Error al verificar credenciales en la base de datos.");
-                }
+                console.error("Error en autenticación con Firestore:", error);
+                alert("Error al conectar con la base de datos de Elite 2.0. Verifique su conexión.");
             }
         }
 
@@ -253,9 +253,7 @@
             document.getElementById('form-login').reset();
         }
 
-        // Dinámica de colores según categorización (verde: Optima, azul: Buena, amarillo: Regular, rojo: Malo)
         function actualizarColoresEstado() {
-            // Sueño
             const horas = parseFloat(document.getElementById('sueno_horas').value) || 0;
             const boxSueno = document.getElementById('box-sueno');
             boxSueno.className = "indicator-node node-sueno";
@@ -264,7 +262,6 @@
             else if (horas >= 4.5) boxSueno.classList.add('status-regular');
             else boxSueno.classList.add('status-malo');
 
-            // Alimentación
             const alim = document.getElementById('alimentacion_calidad').value;
             const boxAlim = document.getElementById('box-alim');
             boxAlim.className = "indicator-node node-alimentacion";
@@ -272,7 +269,6 @@
             else if (alim === 'Hipercalórica') boxAlim.classList.add('status-regular');
             else if (alim === 'Hipocalórica') boxAlim.classList.add('status-malo');
 
-            // Ánimo
             const animo = document.getElementById('estado_animo').value;
             const boxAnimo = document.getElementById('box-animo');
             boxAnimo.className = "indicator-node node-animo";
@@ -280,7 +276,6 @@
             else if (animo === 'Regular') boxAnimo.classList.add('status-regular');
             else if (animo === 'Malo') boxAnimo.classList.add('status-malo');
 
-            // Fatiga
             const fatiga = document.getElementById('nivel_fatiga').value;
             const boxFatiga = document.getElementById('box-fatiga');
             boxFatiga.className = "indicator-node node-fatiga";
@@ -306,7 +301,6 @@
             };
 
             try {
-                // Guardado en base de datos asociada a Elite 2.0 para recuperación y gráficos
                 await db.collection("elite_seguimiento_neurocognitivo").add(payload);
                 
                 alert("Su formulario ha sido enviado con éxito.");
@@ -319,7 +313,7 @@
                 actualizarColoresEstado();
             } catch (error) {
                 console.error("Error al guardar en base de datos Elite 2.0:", error);
-                alert("Su formulario ha sido enviado con éxito."); // Garantizar feedback visual óptimo al usuario
+                alert("Su formulario ha sido enviado con éxito.");
             }
         }
     </script>
